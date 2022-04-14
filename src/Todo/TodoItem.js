@@ -41,7 +41,7 @@ function TodoItem({ todo, index, onChange }) {
                 />
                 <strong>{index + 1}</strong>
                 &nbsp;
-                {todo.description}
+                {todo.title}
             </span>
             <button className='rm' onClick={removeTodo.bind(null, todo.id)}>&times;</button>
         </li>
