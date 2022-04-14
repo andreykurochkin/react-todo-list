@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import TodoList from './Todo/TodoList';
 import Context from './context';
-import AddTodo from './Todo/AddTodo';
 import Loader from './Todo/Loader';
+
+// import AddTodo from './Todo/AddTodo';
+
+
+const AddTodo = React.lazy(
+    () =>
+    new Promise(resolve => {
+        setTimeout(() => {
+            resolve(import('./Todo/AddTodo'))
+        }, 2000)
+    })
+);
+// new Promise(resolve => {
+//     resolve((setTimeout(() => import('./Todo/AddTodo'), 2000))
+// });
 
 function App() {
 
@@ -42,17 +56,19 @@ function App() {
                     setTodos(todos);
                     setLoading(false);
                 }, 2000);
-            })
+            });
     }, []);
 
     return (
         <Context.Provider value={{ removeTodo: removeTodo }}>
             <div className='wrapper'>
                 <h1>React tutorial</h1>
-                <AddTodo onCreate={onCreate} />
+                <React.Suspense fallback={<p>Loading...</p>}>
+                    <AddTodo onCreate={onCreate} />
+                </React.Suspense>
                 {loading && <Loader />}
-                { (todos.length) 
-                    ? (<TodoList todos={todos} onToggle={toggleTodo} />) 
+                {(todos.length)
+                    ? (<TodoList todos={todos} onToggle={toggleTodo} />)
                     : (loading ? null : <p>No content</p>)}
             </div>
         </Context.Provider>
